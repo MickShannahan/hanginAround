@@ -22,7 +22,7 @@ export class SocketHandler {
           return fn.call(this, payload)
         }
         if (!this.requiresAuth()) {
-          return this.socket.emit('error', { message: 'Unauthorized' })
+          return this.socket.emit('error', { message: 'Unauthorized', event, payload })
         }
         return fn.call(this, payload)
       } catch (e) {

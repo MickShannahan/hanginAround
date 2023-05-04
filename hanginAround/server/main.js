@@ -1,8 +1,9 @@
 import express from 'express'
-import { createServer } from 'http'
-import { DbConnection } from './db/DbConfig'
+import { readFileSync } from 'fs'
+import { createServer } from 'https'
 import { socketProvider } from './SocketProvider'
 import { Startup } from './Startup'
+import { DbConnection } from './db/DbConfig'
 import { logger } from './utils/Logger'
 
 // create server & socketServer
@@ -14,7 +15,10 @@ if (process.env.NODE_ENV == 'dev') {
   process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 1;
 }
 
-const httpServer = createServer(app)
+const httpServer = createServer({
+  key: readFileSync("key.pem"),
+  cert: readFileSync("cert.pem"),
+}, app)
 Startup.ConfigureGlobalMiddleware(app)
 Startup.ConfigureRoutes(app)
 

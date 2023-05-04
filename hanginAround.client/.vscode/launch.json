@@ -9,6 +9,12 @@
             "name": "Start Client",
             "request": "launch",
             "type": "node-terminal"
+        },
+        {
+            "command": "npm run host",
+            "name": "Host Client",
+            "request": "launch",
+            "type": "node-terminal"
         }
     ]
 }

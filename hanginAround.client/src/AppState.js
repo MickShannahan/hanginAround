@@ -6,6 +6,10 @@ export const AppState = reactive({
   /** @type {import('./models/Account.js').Account} */
   account: {},
 
+  //helpDesk
+  helpInstructors: [],
+  students: [],
+
   // Rooms
   rooms: [],
   activeRoom: null,

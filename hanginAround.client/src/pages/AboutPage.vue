@@ -1,15 +1,18 @@
 <template>
-  <div class="about">
-    <h1>This is the about page</h1>
+  <div class="container-fluid text-light">
+    pretend you are in the lab learnin
+
+    <HelpBar></HelpBar>
   </div>
 </template>
 
 <script>
+import HelpBar from '../components/HelpBar.vue';
+
 export default {
   setup() {
-    return {
-
-    }
-  }
+    return {};
+  },
+  components: { HelpBar }
 }
 </script>

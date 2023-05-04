@@ -1,8 +1,13 @@
 <template>
   <div class="peer" v-if="profile" @click="setActive">
     <img :src="profile.picture" alt="">
-    {{ profile.name }}
-    <button class="btn btn-danger" @click.stop="hms.kick(peer.id)">🥾</button>
+    {{ profile.name }} {{ profile.id }}
+    <div v-if="isLocal">
+
+      <button class="btn btn-danger" @click.stop="seeScreen()">🥾</button>
+      <button class="btn btn-danger" @click.stop="hms.toggleVideo()">✂️</button>
+    </div>
+
   </div>
 </template>
 
@@ -14,6 +19,8 @@ import { hms } from '../services/hmsService.js';
 
 const props = defineProps({ peer: Object, num: Number })
 const profile = computed(() => props.peer.metadata ? JSON.parse(props.peer?.metadata) : null)
+
+const isLocal = computed(() => props.peer.isLocal)
 
 function setActive() {
   AppState.activePeer = props.peer

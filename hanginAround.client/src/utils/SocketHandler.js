@@ -13,20 +13,24 @@ const SOCKET_EVENTS = {
   error: 'error'
 }
 
+
 export class SocketHandler {
   /**
    * @param {String} url
    */
   constructor(requiresAuth = false, url = baseURL) {
     if (!useSockets) { return }
+
     this.socket = io(url || baseURL)
     this.requiresAuth = requiresAuth
     this.queue = []
     this.authenticated = false
+
     this
       .on(SOCKET_EVENTS.connected, this.onConnected)
       .on(SOCKET_EVENTS.authenticated, this.onAuthenticated)
       .on(SOCKET_EVENTS.error, this.onError)
+
   }
 
   on(event, fn) {
@@ -37,7 +41,8 @@ export class SocketHandler {
   onConnected(connection) {
     logger.log('[SOCKET_CONNECTION]', connection)
     this.connected = true
-    this.playback()
+    if (!this.requiresAuth)
+      this.playback()
   }
 
   onAuthenticated(auth) {
@@ -75,6 +80,7 @@ export class SocketHandler {
     if (!this.connected) {
       return this.enqueue(action, payload)
     }
+    logger.log(action, payload)
     this.socket.emit(action, payload)
   }
 }

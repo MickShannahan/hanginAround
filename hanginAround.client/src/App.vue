@@ -5,9 +5,6 @@
   <main>
     <router-view />
   </main>
-  <footer class="bg-dark text-light">
-    Made with 💖 by CodeWorks
-  </footer>
 </template>
 
 <script>
@@ -20,10 +17,12 @@ export default {
   setup() {
     function closeDown(event) {
       event.preventDefault()
+      hms.leaveRoom()
       return event.returnValue = "are you sure? this will end the call";
     }
     onMounted(() => {
-      document.addEventListener('beforeunload', closeDown, { capture: true })
+      window.addEventListener('beforeunload', closeDown, { capture: true })
+      window.addEventListener('unload', closeDown, { capture: true })
     })
     return {
       appState: computed(() => AppState)

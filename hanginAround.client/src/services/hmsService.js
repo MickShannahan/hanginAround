@@ -1,4 +1,4 @@
-import { HMSReactiveStore, selectPeers, selectScreenShareByPeerID } from "@100mslive/hms-video-store";
+import { HMSReactiveStore, selectIsLocalVideoEnabled, selectPeers, selectRoom, selectScreenShareByPeerID } from "@100mslive/hms-video-store";
 import { AppState } from "../AppState.js";
 import { logger } from "../utils/Logger.js";
 import { computed, reactive } from "vue";
@@ -20,6 +20,7 @@ hmsNotifications.onNotification((note) => {
 
 class HMSService {
   constructor() {
+    this.trackId = ''
     hmsStore.subscribe((data) => {
       logger.log('🦧 update peers')
       AppState.peers = data
@@ -53,7 +54,7 @@ class HMSService {
     return res.data.token
   }
 
-  async joinRoom(roomId, user) {
+  async joinRoom(roomId, user, options = { isAudioMuted: true, isVideoMuted: true }) {
     try {
       AppState.peers = []
       logger.log(user.name, 'joining video call')
@@ -61,8 +62,7 @@ class HMSService {
       await hmsActions.join({
         userName: user.name,
         authToken, settings: {
-          isAudioMuted: false,
-          isVideoMuted: false,
+          ...options
         },
         metaData: { ...user },
         rememberDeviceSelection: true,
@@ -75,7 +75,9 @@ class HMSService {
   }
 
   async leaveRoom() {
-    await hmsActions.leaveRoom();
+    if (hmsStore.getState(selectRoom)) {
+      await hmsActions.leave()
+    }
   }
 
   async getPeers() {
@@ -90,7 +92,10 @@ class HMSService {
   async loadStream(trackId, videoElm) {
     try {
       logger.log(trackId, videoElm)
+      logger.log(trackId, videoElm)
+      if (this.trackId) await hmsActions.detachVideo(this.trackId, videoElm)
       await hmsActions.attachVideo(trackId, videoElm)
+      this.trackId = trackId
     } catch (error) {
       logger.error(error)
     }
@@ -115,6 +120,11 @@ class HMSService {
     } catch (error) {
       logger.error(error)
     }
+  }
+
+  async toggleVideo() {
+    let camOn = hmsStore.getState(selectIsLocalVideoEnabled)
+    await hmsActions.setLocalVideoEnabled(!camOn)
   }
 }
 

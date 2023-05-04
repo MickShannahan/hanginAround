@@ -21,8 +21,9 @@ export class AuthHandler extends SocketHandler {
       const profile = await accountService.getAccount(user)
       const limitedProfile = {
         id: profile.id,
-        email: profile.email,
-        picture: profile.picture
+        name: profile.name,
+        picture: profile.picture,
+        role: profile.role
       }
       this.socket.join(user.id)
       attachHandlers(this.io, this.socket, user, limitedProfile)
