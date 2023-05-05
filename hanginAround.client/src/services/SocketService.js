@@ -9,7 +9,6 @@ class SocketService extends SocketHandler {
     this.name = 'Bobby' + Math.random()
     logger.error('🤖', this.name)
     this
-      .on('error', this.onError)
       .on('CONNECTED:ROOM', this.connectedRoom)
       .on('INSTRUCTOR:JOINED:ROOM', this.instructorJoinedRoom)
       .on('LEFT:ROOM', this.leftRoom)
@@ -26,8 +25,9 @@ class SocketService extends SocketHandler {
   connectedRoom(payload) {
     logger.log('⚡[CONNECTED TO ROOM]', payload)
     AppState.helpInstructors = payload.users.filter(u => u.role == 'instructor')
-    AppState.students = payload.users.filter(u.role != 'instructor')
+    AppState.students = payload.users.filter(u => u.role != 'instructor')
   }
+
   instructorJoinedRoom(payload) {
     logger.log('⚡[INSTRUCTOR JOINED ROOM]', payload)
     if (payload.user.id != AppState.user.id) {

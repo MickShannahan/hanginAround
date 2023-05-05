@@ -2,16 +2,16 @@
   <div class=" help-bar">
     <section class="instructors-wrapper">
       <div class="instructors">
-        <instructor v-for="i in instructors" :instructor="i" />
+        <Instructor v-for="i in instructors" :instructor="i" />
       </div>
     </section>
-    <div class="help-text text-end p-2 pe-4">have a question?</div>
+    <div class="help-text text-end p-2 pe-4">have a question? </div>
     <section class="help-btn-wrapper text-end">
       <button class="help-btn selectable btn px-4 align-content-start" :class="{ inQueue }" @click="enterQueue">
-        <div v-if="!inQueue"> Help <i class="mdi mdi-hand-back-right-outline"></i>
+        <div v-if="!inQueue"> Help <i class="mdi mdi-hand-front-left-outline"></i>
         </div>
         <div v-else>
-          <div><i class="mdi mdi-hand-back-right me-2"></i>0:0{{ waitTimer }}</div>
+          <div><i class="mdi mdi-hand-front-left me-2"></i>0:0{{ waitTimer }}</div>
           <div>getting help</div>
           <button @click.stop="exitQueue" class="btn bg-transparent"> cancel<i class="mdi mdi-close"></i></button>
         </div>
@@ -26,6 +26,7 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { AppState } from '../AppState.js';
 import { socketService } from '../services/SocketService';
 import Pop from '../utils/Pop.js';
+import Instructor from './Instructor.vue';
 
 onMounted(() => {
   joinRoom()

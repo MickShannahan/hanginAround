@@ -18,6 +18,7 @@ class SocketProvider {
   io = null
   initialize(httpServer) {
     try {
+      logger.log('⚡ socket initializing ', Math.random())
       this.io = new Server(httpServer, {
         cors: {
           origin: process.env.NODE_ENV === 'dev' ? '*' : ''

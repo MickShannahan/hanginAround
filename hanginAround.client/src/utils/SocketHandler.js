@@ -34,7 +34,15 @@ export class SocketHandler {
   }
 
   on(event, fn) {
-    this.socket?.on(event, fn.bind(this))
+    const ctx = this
+    this.socket?.on(event, function () {
+      try {
+        fn.call(ctx, ...arguments)
+      } catch (error) {
+        logger.warn('🩻[FATAL EVENT]', event)
+        logger.error('💀[FATAL ERROR IN HANDLER METHOD]', error)
+      }
+    })
     return this
   }
 
@@ -80,7 +88,7 @@ export class SocketHandler {
     if (!this.connected) {
       return this.enqueue(action, payload)
     }
-    logger.log(action, payload)
+    logger.log('📡', action, payload)
     this.socket.emit(action, payload)
   }
 }

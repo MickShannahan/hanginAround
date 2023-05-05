@@ -23,6 +23,7 @@ export class TestHandler extends SocketHandler {
     _setUpRoom(payload.roomName)
     rooms[payload.roomName].push({ socket: this.socket.id, ...this.profile })
     this.socket.join(payload.roomName)
+
     let socketUsers = rooms[payload.roomName]
     let seeStudents = this.user.permissions.includes('read:students')
     let filteredUsers = socketUsers.filter(u => u.role == 'instructor' || seeStudents)
